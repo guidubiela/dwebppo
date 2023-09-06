@@ -1,14 +1,12 @@
 <?php
 abstract class Empresa {
 
-    private $id;
+    private $id = 0;
     private $nome;
-    private $fund;
 
-    public function __construct($pid, $pnome, $pfund) {
+    public function __construct($pid, $pnome) {
         $this->setId($pid);
         $this->setNome($pnome);
-        $this->setFund($pfund);
     }
 
 
@@ -20,10 +18,6 @@ abstract class Empresa {
         $this->nome = $nome;
     }
 
-    public function setFund($fund) {
-        $this->fund = $fund;
-    }
-
     public function getId() {
         return $this->id;
     }
@@ -32,12 +26,8 @@ abstract class Empresa {
         return $this->nome;
     }
 
-    public function getFund() {
-        return $this->fund;
-    }
-
-    public abstract function inserir(){}
-    public abstract function editar(){}
-    public abstract function excluir(){}
+    public abstract function inserir();
+    public abstract function editar();
+    public abstract function excluir();
 }
 ?>

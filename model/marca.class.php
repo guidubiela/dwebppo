@@ -1,26 +1,37 @@
 <?php
 require_once('database.class.php');
 require_once('empresa.class.php');
+require_once('carro.class.php');
 
 class Marca extends Empresa{
 
-    public function __construct($pid, $pnome, $pfund) {
-        parent::__construct($pid, $pnome, $pfund);
+    private $veiculos;
+
+    public function __construct($pid, $pnome) {
+        parent::__construct($pid, $pnome);
+        $this->veiculos = array();
+        $this->getVeiculos();
     }
 
     public function inserir(){
         $conexao = Database::conectar();
-        $sql = 'INSERT INTO marca (nome, fund)
-                      VALUES (:nome, :fund)';
+        $sql = 'INSERT INTO marca (nome)
+                      VALUES (:nome)';
         $params = array(
-            ':nome'=>$this->getNome(),
-            ':fund'=>$this->getFund() 
+            ':nome'=>$this->getNome()
         );
         Database::preparar($conexao, $sql, $params);
         return Database::executar($sql, $params);
     }
 
-    public function editar(){
+    public function excluir(){
+        $conexao = Database::conectar();
+        $sql = 'DELETE FROM carro 
+                  WHERE marca_idmarca = :id';         
+        $params = array(':id'=>$this->getId());
+        Database::preparar($conexao, $sql, $params);       
+        Database::executar($sql, $params);
+
         $conexao = Database::conectar();
         $sql = 'DELETE FROM marca 
                   WHERE idmarca = :id';         
@@ -29,16 +40,14 @@ class Marca extends Empresa{
         return Database::executar($sql, $params);
     }
 
-    public function excluir(){
+    public function editar(){
         $conexao = Database::conectar();
         $sql = 'UPDATE marca
-                    SET nome = :nome,
-                        fund  = :fund
+                    SET nome = :nome
                     WHERE idmarca = :id';
         $params = array(
-            ':id'=>$this->getId(),
-            ':nome'=> $this->getNome(),
-            ':fund'=> $this->getFund()
+            ':id' => $this->getId(),
+            ':nome' => $this->getNome()
         );
         Database::preparar($conexao, $sql, $params);
         return Database::executar($sql, $params);
@@ -54,6 +63,21 @@ class Marca extends Empresa{
         if ($tipo > 0)
             $params = array(':info'=>$info);         
         return Database::listar($sql, $params);
+    }
+
+    private function getVeiculos() {
+        $sql = 'SELECT * FROM carro 
+                WHERE marca_idmarca = :id';
+        $params = array(':id' => $this->getId());     
+        $resultado = Database::listar($sql, $params);
+        foreach($resultado as $item){
+            $c = new Carro($item['idcarro'], $item['modelo'], $item['ano'], $item['km'], $item['idmarca']);
+            $this->addVeiculo($c);
+        }
+    }
+
+    public function addVeiculo(Veiculo $veiculo){
+        $this->veiculos[] = $veiculo;
     }
 
 }

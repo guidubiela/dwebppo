@@ -23,7 +23,14 @@ class Carro extends Veiculo {
         return Database::executar($sql, $params);
     }
 
-    public function editar(){
+    public function excluir(){
+        $conexao = Database::conectar();
+        $sql = 'DELETE FROM loja_carro 
+                  WHERE carro_idcarro = :id';         
+        $params = array(':id'=>$this->getId());
+        Database::preparar($conexao, $sql, $params);       
+        Database::executar($sql, $params);
+
         $conexao = Database::conectar();
         $sql = 'DELETE FROM carro 
                   WHERE idcarro = :id';         
@@ -32,7 +39,7 @@ class Carro extends Veiculo {
         return Database::executar($sql, $params);
     }
 
-    public function excluir(){
+    public function editar(){
         $conexao = Database::conectar();
         $sql = 'UPDATE carro
                     SET modelo = :modelo,

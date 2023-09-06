@@ -6,9 +6,9 @@ class Loja extends Empresa{
 
     private $cnpj;
 
-    public function __construct($pid, $pnome, $pfund, $pcnpj) {
-        parent::__construct($pid, $pnome, $pfund);
-        $this->getCnpj();
+    public function __construct($pid, $pnome, $pcnpj) {
+        parent::__construct($pid, $pnome);
+        $this->setCnpj($pcnpj);
     }
 
     public function setCnpj($cnpj) {
@@ -21,18 +21,24 @@ class Loja extends Empresa{
 
     public function inserir(){
         $conexao = Database::conectar();
-        $sql = 'INSERT INTO loja (nome, fund, cnpj)
-                      VALUES (:nome, :fund, :cnpj)';
+        $sql = 'INSERT INTO loja (nome, cnpj)
+                      VALUES (:nome, :cnpj)';
         $params = array(
             ':nome'=>$this->getNome(),
-            ':fund'=>$this->getFund(),
             ':cnpj'=>$this->getCnpj()
         );
         Database::preparar($conexao, $sql, $params);
         return Database::executar($sql, $params);
     }
 
-    public function editar(){
+    public function excluir(){
+        $conexao = Database::conectar();
+        $sql = 'DELETE FROM loja_carro 
+                  WHERE loja_idloja = :id';         
+        $params = array(':id'=>$this->getId());
+        Database::preparar($conexao, $sql, $params);       
+        Database::executar($sql, $params);
+
         $conexao = Database::conectar();
         $sql = 'DELETE FROM loja 
                   WHERE idloja = :id';         
@@ -41,17 +47,15 @@ class Loja extends Empresa{
         return Database::executar($sql, $params);
     }
 
-    public function excluir(){
+    public function editar(){
         $conexao = Database::conectar();
         $sql = 'UPDATE loja
                     SET nome = :nome,
-                        fund  = :fund,
                         cnpj = :cnpj
                     WHERE idloja = :id';
         $params = array(
             ':id'=>$this->getId(),
             ':nome'=>$this->getNome(),
-            ':fund'=>$this->getFund(),
             ':cnpj'=>$this->getCnpj()
         );
         Database::preparar($conexao, $sql, $params);

@@ -1,7 +1,7 @@
 <?php
 abstract class Veiculo{
     
-    private $id;
+    private $id = 0;
     private $modelo;
     private $ano;
     private $km;
@@ -28,7 +28,7 @@ abstract class Veiculo{
         $this->ano = $ano;
     }
 
-    public function setAno($km) {
+    public function setKm($km) {
         $this->km = $km;
     }
 
@@ -57,9 +57,9 @@ abstract class Veiculo{
         return $this->idmarca;
     }
 
-    public abstract function inserir(){}
-    public abstract function editar(){}
-    public abstract function excluir(){}
+    public abstract function inserir();
+    public abstract function editar();
+    public abstract function excluir();
 
 }
 ?>
