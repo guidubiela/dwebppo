@@ -21,7 +21,7 @@ CREATE TABLE `carro` (
 CREATE TABLE `loja` (
   `idloja` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
-  `cnpj` int(14) NOT NULL,
+  `cnpj` varchar(45) NOT NULL,
   PRIMARY KEY (`idloja`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
